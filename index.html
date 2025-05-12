@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulir Kontak</title>
+  <style>
+    body {
+      background-color: #000000;
+      color: #00DFFF;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    form {
+      width: 100%;
+      max-width: 500px;
+      border: 2px solid #00DFFF;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00DFFF;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #000;
+      border: 1px solid #00DFFF;
+      color: #00DFFF;
+      border-radius: 5px;
+      box-shadow: 0 0 5px #00DFFF;
+    }
+
+    button {
+      background-color: #000;
+      color: #00DFFF;
+      border: 2px solid #00DFFF;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 0 5px #00DFFF;
+    }
+
+    .success {
+      margin-top: 15px;
+      color: #00ff88;
+    }
+  </style>
+</head>
+<body>
+  <form id="contact-form">
+    <h2>Formulir Kontak</h2>
+    <input type="text" name="nama" placeholder="Masukkan nama lengkap" required />
+    <input type="email" name="email" placeholder="Masukkan alamat email" required />
+    <input type="text" name="alamat" placeholder="Masukkan alamat rumah" required />
+    <textarea name="pesan" placeholder="Tulis pesan Anda di sini" rows="5" required></textarea>
+    <button type="submit">Kirim</button>
+    <div class="success" id="success-message"></div>
+  </form>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const data = {
+        nama: form.nama.value,
+        email: form.email.value,
+        alamat: form.alamat.value,
+        pesan: form.pesan.value,
+      };
+
+      // Kirim data ke Web App
+      fetch("https://script.google.com/macros/s/AKfycbwsmiXgCkHrNCkY7xLO5LOeA5qESmH2zvq2k9hny_VxCW21yHfhY7EJh67p9ZClG35U/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.result === "success") {
+          document.getElementById("success-message").textContent = "Data berhasil dikirim!";
+          form.reset();
+        } else {
+          alert("Gagal mengirim data.");
+        }
+      })
+      .catch(err => alert("Terjadi kesalahan: " + err.message));
+    });
+  </script>
+</body>
+</html>
